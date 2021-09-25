@@ -1,6 +1,6 @@
 all: main
 
-main: hello.c
+main: main.c
     armv8-rpi4-linux-gnueabihf-gcc main.c -o main
 clean:
-    rm -f *.o hello
+    rm -f *.o main
