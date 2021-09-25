@@ -1,0 +1,102 @@
+Steps to build a toolchain for raspberry pi 4 using crosstool-ng
+
+1. Installing the required dependencies:
+- Run command on you computer
+$ sudo apt install -y gcc g++ gperf bison flex texinfo help2man make libncurses5-dev python3-dev autoconf automake libtool libtool-bin gawk wget bzip2 xz-utils unzip patch libstdc++6 rsync git
+
+2. Download and settup crosstool-ng
+- Download
+$ cd ~/Downloads
+$ wget http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-1.24.0.tar.bz2
+
+- Now extract the files and change into the extracted directory:
+$ tar xjf crosstool-ng-1.24.0.tar.bz2
+$ cd crosstool-ng-1.24.0
+
+- Set the install location
+$ ./configure --prefix=/opt/x-tools
+
+- build it using make:
+$ make
+$ make install
+
+- Modified bashrc to add PATH
+$ nano ~/.bashrc
+$ export PATH="/opt/x-tools/bin:$PATH"
+
+- Created a staging directory
+$ mkdir -p ~/raspberry_pi/toolchain_staging 
+$ cd ~/raspberry_pi/toolchain_staging
+
+3. Check raspberry version
+- Connect raspberry via SSH, install binutils-source check patch
+$ ssh pi@your_pi_ip_address
+$ sudo apt install binutils-source
+$ ls /usr/src/binutils/patches/ => You should see a patch file named 129_multiarch_libpath.patch
+
+- Check kernel version (My kernel version is 5.10.60-v7l+)
+$ uname -r
+
+- Check binutils version (My binutils version is 2.31.1)
+$ ld --version
+
+- Check gcc version (My gcc version is 8.3.0)
+$ gcc -version
+
+- Check glibc version (My glibc version is 2.28)
+$ ldd --version
+
+- Install the symlinks package
+$ sudo apt install symlinks
+$ sudo symlinks -rc /.
+
+- Exit ssh
+$ exit
+
+3. Go back to your computer
+- Create directory to place the files it downloads during the build process
+$ mkdir src
+
+- Copy binutils of raspberry via ssh
+$ mkdir -p patches/binutils/2.31.1/
+$ cd patches/binutils/2.31.1/
+$ scp pi@raspberrypi:/usr/src/binutils/patches/129_multiarch_libpath.patch ./
+$ cd ../../../
+
+- Check list-samples of crosstool-ng
+$ ct-ng list-samples
+
+- Choose armv8-rpi3-linux-gnueabihf and edit it to use with raspberry pi 4
+$ ct-ng armv8-rpi3-linux-gnueabihf
+$ ct-ng menuconfig
+
+- Change "Local tarballs directory" in paths and misc option
+${CT_TOP_DIR}/src
+
+- Enable the "strip target toolchain executables as well"
+
+- Change "Local patch directory" in paths and misc option
+${CT_TOP_DIR}/patches
+
+- Change cortex-a53 to cortex-a72 in target options
+
+- Change rpi3 to rpi4 in toolchain options
+
+- Change version of linux in operating system
+
+- Change version of binutils in binary utilitles
+
+- Change version of glibc in C-library
+
+- Change version of gcc in C compiler
+
+- Add--enable-multiarch to the gcc extra in C compiler
+
+- Exporting the Debian multiarch target variable
+$ export DEB_TARGET_MULTIARCH=arm-linux-gnueabihf
+
+4. Build the toolchain
+$ ct-ng build 
+=> This will take around 30 minutes.
+
+
