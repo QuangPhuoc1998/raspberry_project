@@ -1,0 +1,1 @@
+cmd_/home/phuoc/phuoc/raspberry_linux/drivers/gpio/Module.symvers := sed 's/ko$$/o/' /home/phuoc/phuoc/raspberry_linux/drivers/gpio/modules.order | scripts/mod/modpost -m -a   -o /home/phuoc/phuoc/raspberry_linux/drivers/gpio/Module.symvers -e -i Module.symvers   -T -

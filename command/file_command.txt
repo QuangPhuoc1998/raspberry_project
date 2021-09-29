@@ -1,0 +1,56 @@
+Các lệnh thao tác với file (universality I/O)
+- Mở file
+	int open(const char * pathname, int flags)
+
+Flag		Mục đích	
+O_RDONLY	Mở file để chỉ đọc	
+O_WRONLY	Mở file để chỉ ghi	
+O_RDWR		Mở file để đọc và ghi	
+O_CLOEXEC	Thiết lập cờ close-on-exec	
+O_CREAT		Tạo file nếu nó chưa tồn tại	
+O_DIRECT	Trao đổi dữ liệu trực tiếp giữa user space và file trên ổ cứng, không qua kernel buffer cache 	 
+O_DIRECTORY	Trả về fail nếu đối số “pathname” không phải đường dẫn	
+O_EXCL		Dùng với O_CREAT: chỉ tạo một file mới	
+O_LARGEFILE	Hỗ trợ mở một file lớn	 
+O_NOATIME	Không cập nhật lần mở file trước khi đọc file	 
+O_NOCTTY	Không để file “pathname” trở thành một terminal điều khiển	
+O_NOFOLLOW	Không tham chiếu ngược các liên kết mềm	v4
+O_TRUNC		Xóa nội dung file hiện tại nếu có của file để có độ dài là 0	
+O_APPEND	Ghi tiếp nối từ địa chỉ cuối cùng của file	
+O_ASYNC		Tạo ra một signal khi file sẵn sàng đọc hoặc ghi	 
+O_DSYNC		ung cấp việc bảo toàn dữ liệu đã được đồng bộ	
+O_NONBLOCK	Mở file ở chế độ nonblock, nghĩa là read() hoặc write() sẽ return ngay nếu file chưa sẵn sàng.	
+O_SYNC		Đồng bộ dữ liệu được ghi vào file	
+
++ trả về: index in file table (file descriptor)
+
+- Đóng file
+	int close(int fd);
+
+- Đọc file
+	ssize_t read(int fd, void * buf, size_t count)
+
+- Ghi file
+	ssize_t write(int fd, const void * buf, size_t count)
+
+- Dịch con trỏ tới vị trí cần đọc 
+	off_t lseek(int fd, off_t offset, int whence)
+
++ whence có thể là
+SEEK_SET: Bắt đầu file
+SEEK CUR: Giá trị file offset hiện tại của file
+SEEK_END: Điểm cuối cùng của file
+
+Ví dụ
+lseek(fd, 0, SEEK_CUR)	Lấy giá trị hiện tại của file offset
+lseek(fd, 0, SEEK_SET)	Trỏ đến đầu file
+lseek(fd, 0, SEEK_END)	Trỏ đến cuối file (EOF)
+lseek(fd, -1, SEEK_END)	Trỏ đến byte cuối cùng ngay trước EOF
+lseek(fd, -10, SEEK_CUR)	Trỏ đến 10 byte ngay trước offset hiện tại
+lseek(fd, 10000, SEEK_END);	Trỏ đến 1000 byte ngay sau EOF
+
+- Ghi tất cả từ ram xuống bộ nhớ
+	void sync(void)
+- Ghi chỉ file đó từ ram xuống bộ nhớ
+	 int fsync(int fd); 
+

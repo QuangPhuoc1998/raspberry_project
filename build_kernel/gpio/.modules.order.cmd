@@ -1,0 +1,1 @@
+cmd_/home/phuoc/phuoc/raspberry_linux/drivers/gpio/modules.order := {   echo /home/phuoc/phuoc/raspberry_linux/drivers/gpio/gpio_driver.ko; :; } | awk '!x[$$0]++' - > /home/phuoc/phuoc/raspberry_linux/drivers/gpio/modules.order

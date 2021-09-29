@@ -1,0 +1,1 @@
+cmd_/home/phuoc/phuoc/raspberry_linux/drivers/gpio/gpio_driver.o := armv8-rpi4-linux-gnueabihf-ld  -EL    -r -o /home/phuoc/phuoc/raspberry_linux/drivers/gpio/gpio_driver.o /home/phuoc/phuoc/raspberry_linux/drivers/gpio/main.o /home/phuoc/phuoc/raspberry_linux/drivers/gpio/bsp_gpio.o

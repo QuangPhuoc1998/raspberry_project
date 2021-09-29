@@ -1,0 +1,1 @@
+cmd_/home/phuoc/phuoc/raspberry_linux/drivers/gpio/gpio_driver.mod := { echo  /home/phuoc/phuoc/raspberry_linux/drivers/gpio/main.o /home/phuoc/phuoc/raspberry_linux/drivers/gpio/bsp_gpio.o;  echo; } > /home/phuoc/phuoc/raspberry_linux/drivers/gpio/gpio_driver.mod

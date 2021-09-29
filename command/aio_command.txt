@@ -1,0 +1,95 @@
+Link detail: https://man7.org/linux/man-pages/man7/aio.7.html
+
+- struct aiocb cb;
+	
+memset(&cb, 0, sizeof(struct aiocb));
+cb.aio_nbytes = SIZE_TO_READ;
+cb.aio_fildes = file;
+cb.aio_offset = 0;
+cb.aio_buf = buffer;
+
+- int aio_read(struct aiocb *aiocbp);
+
+- int aio_write(struct aiocb *aiocbp);
+
+- int aio_error(const struct aiocb *aiocbp);
+return:
+*  EINPROGRESS, if the request has not been completed yet.
+
+*  ECANCELED, if the request was canceled.
+
+*  0, if the request completed successfully.
+
+- ssize_t aio_return(struct aiocb *aiocbp);
+
+
+aio_nbytes	The number of bytes to be read or written by this operation.
+aio_filedes	The file descriptor of the file to access.
+aio_buf		A pointer to the data to be written, or the location to store data to be read.
+aio_offset	The offset from the start of the file.
+
+Asynchronous example:
+
+#include <sys/types.h>
+#include <aio.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+const int SIZE_TO_READ = 100;
+
+int main()
+{
+	// open the file
+	int file = open("test_aoi.txt", O_RDONLY, 0);
+	
+	if (file == -1)
+	{
+		printf("Unable to open file!\n");
+		return 1;
+	}
+	
+	// create the buffer
+	char* buffer = (char *)calloc(SIZE_TO_READ, 1);
+	
+	// create the control block structure
+	struct aiocb cb;
+	
+	memset(&cb, 0, sizeof(struct aiocb));
+	cb.aio_nbytes = SIZE_TO_READ;
+	cb.aio_fildes = file;
+	cb.aio_offset = 0;
+	cb.aio_buf = buffer;
+	
+	// read!
+	if (aio_read(&cb) == -1)
+	{
+		printf("Unable to create request!\n");
+		close(file);
+	}
+	
+	printf("Request enqueued!\n");
+	
+	// wait until the request has finished
+	while(aio_error(&cb) == EINPROGRESS)
+	{
+		printf("Working...\n");
+	}
+	
+	// success?
+	int numBytes = aio_return(&cb);
+	
+	if (numBytes != -1)
+		printf("Success!\n");
+	else
+		printf("Error!\n");
+		
+	// now clean up
+	free(buffer);
+	close(file);
+	
+	return 0;
+}
