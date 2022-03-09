@@ -1,0 +1,1 @@
+cmd_/home/phuoc/Myproject/Rasp_project/Kernel/spi/spi_driver.ko := armv8-rpi4-linux-gnueabihf-ld -r  -EL  --build-id=sha1  -T scripts/module.lds -o /home/phuoc/Myproject/Rasp_project/Kernel/spi/spi_driver.ko /home/phuoc/Myproject/Rasp_project/Kernel/spi/spi_driver.o /home/phuoc/Myproject/Rasp_project/Kernel/spi/spi_driver.mod.o;  true
