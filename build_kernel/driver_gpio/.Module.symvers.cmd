@@ -1,0 +1,1 @@
+cmd_/home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/Module.symvers := sed 's/ko$$/o/' /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/modules.order | scripts/mod/modpost -m -a   -o /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/Module.symvers -e -i Module.symvers   -T -

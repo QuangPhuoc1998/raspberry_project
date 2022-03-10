@@ -1,0 +1,1 @@
+cmd_/home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.o := armv8-rpi4-linux-gnueabihf-ld  -EL    -r -o /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.o /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/main.o

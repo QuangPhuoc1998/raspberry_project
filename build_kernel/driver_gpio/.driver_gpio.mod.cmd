@@ -1,0 +1,1 @@
+cmd_/home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.mod := { echo  /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/main.o;  echo; } > /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.mod

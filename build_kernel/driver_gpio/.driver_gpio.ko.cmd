@@ -1,0 +1,1 @@
+cmd_/home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.ko := armv8-rpi4-linux-gnueabihf-ld -r  -EL  --build-id=sha1  -T scripts/module.lds -o /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.ko /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.o /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.mod.o;  true

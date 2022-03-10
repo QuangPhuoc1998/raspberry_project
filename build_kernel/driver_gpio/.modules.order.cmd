@@ -1,0 +1,1 @@
+cmd_/home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/modules.order := {   echo /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/driver_gpio.ko; :; } | awk '!x[$$0]++' - > /home/phuoc/Myproject/Rasp_project/Kernel/driver_gpio/modules.order
