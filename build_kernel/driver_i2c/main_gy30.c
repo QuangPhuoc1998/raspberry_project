@@ -135,7 +135,8 @@ static int __init ModuleInit(void) {
 
 	if(bmp_i2c_adapter != NULL) {
 		bmp280_i2c_client = i2c_new_client_device(bmp_i2c_adapter, &bmp_i2c_board_info);
-		if(bmp280_i2c_client != NULL) {
+		if(bmp280_i2c_client != NULL)
+		{
 			if(i2c_add_driver(&bmp_driver) != -1) {
 				ret = 0;
 			}

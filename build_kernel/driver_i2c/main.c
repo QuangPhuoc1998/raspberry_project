@@ -11,7 +11,35 @@
 
 #include "main.h"
     
-dev_t dev = 0;
+/*--- I2C config begin ---*/
+
+static struct i2c_adapter * bmp_i2c_adapter = NULL;
+static struct i2c_client * bmp280_i2c_client = NULL;
+
+/* Defines for device identification */ 
+#define I2C_BUS_AVAILABLE	1		/* The I2C Bus available on the raspberry */
+#define SLAVE_DEVICE_NAME	"GY30"	/* Device and Driver Name */
+#define BMP280_SLAVE_ADDRESS	0x23		/* BMP280 I2C address */
+
+static const struct i2c_device_id bmp_id[] = {
+		{ SLAVE_DEVICE_NAME, 0 }, 
+		{ }
+};
+
+static struct i2c_driver bmp_driver = {
+	.driver = {
+		.name = SLAVE_DEVICE_NAME,
+		.owner = THIS_MODULE
+	}
+};
+
+static struct i2c_board_info bmp_i2c_board_info = {
+	I2C_BOARD_INFO(SLAVE_DEVICE_NAME, BMP280_SLAVE_ADDRESS)
+};
+
+/*--- I2C config end ---*/
+
+static dev_t dev = 0;
 static struct class *dev_class;
 static struct cdev etx_cdev;
  
@@ -59,9 +87,20 @@ static int etx_release(struct inode *inode, struct file *file)
 */ 
 static ssize_t etx_read(struct file *filp, char __user *buf, size_t len, loff_t *off)
 {
-  uint8_t temp = 0;
-  
-  if( copy_to_user(buf, &temp, len) > 0) {
+  uint8_t temp[2] = {0};
+
+  //uint16_t temperature = 0;
+  uint16_t uwI2CData= 0;
+
+  uwI2CData = i2c_smbus_read_word_data(bmp280_i2c_client, 0x13);
+  temp[0] = (uwI2CData & 0xFF00 ) >> 8;
+  temp[1] = (uwI2CData & 0x00FF );
+  //temperature = uwI2CData / 1;
+  pr_info("Data = %d\n", uwI2CData);
+  //pr_info("Light = %d\n", temperature);
+  len = 2;
+
+  if( copy_to_user(buf,temp, len) > 0) {
     pr_err("ERROR: Not all the bytes have been copied to user\n");
   }
 
@@ -87,8 +126,9 @@ static ssize_t etx_write(struct file *filp, const char __user *buf, size_t len, 
 */ 
 static int __init etx_driver_init(void)
 {
+  int ret = -1;
   /*Allocating Major number*/
-  if((alloc_chrdev_region(&dev, 0, 1, "temp_Dev")) <0){
+  if((alloc_chrdev_region(&dev, 0, 1, DRIVER_NAME)) <0){
     pr_err("Cannot allocate major number\n");
     goto r_unreg;
   }
@@ -115,9 +155,34 @@ static int __init etx_driver_init(void)
     goto r_device;
   }
    
+  /*--- I2C init ---*/
+
+  bmp_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
+  if(bmp_i2c_adapter != NULL) 
+  {
+	  pr_info("I2C available\n");
+	  bmp280_i2c_client = i2c_new_client_device(bmp_i2c_adapter, &bmp_i2c_board_info);
+	  if(bmp280_i2c_client != NULL) 
+	  {
+		  if(i2c_add_driver(&bmp_driver) != -1) 
+		  {
+			  ret = 0;
+		  }
+		  else
+		  {
+			  printk("Can't add driver...\n");
+			  goto i2c_err;
+		  }
+		  i2c_put_adapter(bmp_i2c_adapter);
+	  }
+  }
+  /*--------- ------*/
+
   pr_info("Device Driver Insert...Done!!!\n");
-  return 0;
- 
+  return ret;
+
+i2c_err:
+
 r_device:
   device_destroy(dev_class,dev);
 r_class:
@@ -135,6 +200,8 @@ r_unreg:
 */ 
 static void __exit etx_driver_exit(void)
 {
+  i2c_unregister_device(bmp280_i2c_client);
+  i2c_del_driver(&bmp_driver);
   device_destroy(dev_class,dev);
   class_destroy(dev_class);
   cdev_del(&etx_cdev);
