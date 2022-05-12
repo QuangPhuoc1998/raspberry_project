@@ -1,0 +1,1 @@
+cmd_/home/phuoc/Myproject/Rasp_project/Kernel/driver_ps2/modules.order := {   echo /home/phuoc/Myproject/Rasp_project/Kernel/driver_ps2/ps2_device.ko; :; } | awk '!x[$$0]++' - > /home/phuoc/Myproject/Rasp_project/Kernel/driver_ps2/modules.order

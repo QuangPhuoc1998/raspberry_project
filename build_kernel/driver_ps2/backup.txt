@@ -1,0 +1,67 @@
+/*--- Setting GPIO ---*/
+    /*-> MOSI */
+    if(gpio_is_valid(MOSI) == false){
+    pr_err("GPIO %d is not valid\n", MOSI);
+        goto r_gpio;
+    }
+    
+    //Requesting the GPIO
+    if(gpio_request(MOSI,"MOSI") < 0){
+        pr_err("ERROR: GPIO %d request\n", MOSI);
+        goto r_gpio;
+    }
+    
+    //configure the GPIO as output
+    gpio_direction_output(MOSI, 0);
+    /*-> MISO */
+    if(gpio_is_valid(MISO) == false){
+        pr_err("GPIO %d is not valid\n", MISO);
+        goto r_gpio;
+    }
+    
+    //Requesting the GPIO
+    if(gpio_request(MISO,"MISO") < 0){
+        pr_err("ERROR: GPIO %d request\n", MISO);
+        goto r_gpio;
+    }
+    
+    //configure the GPIO as input
+    gpio_direction_output(MISO, 1);
+    /*-> CS */
+    if(gpio_is_valid(CS) == false){
+        pr_err("GPIO %d is not valid\n", CS);
+        goto r_gpio;
+    }
+    
+    //Requesting the GPIO
+    if(gpio_request(CS,"CS") < 0){
+        pr_err("ERROR: GPIO %d request\n", CS);
+        goto r_gpio;
+    }
+    
+    //configure the GPIO as output
+    gpio_direction_output(CS, 0);
+    /*-> CLK */
+    if(gpio_is_valid(CLK) == false){
+        pr_err("GPIO %d is not valid\n", CLK);
+        goto r_gpio;
+    }
+    
+    //Requesting the GPIO
+    if(gpio_request(CLK,"CLK") < 0){
+        pr_err("ERROR: GPIO %d request\n", CLK);
+        goto r_gpio;
+    }
+    
+    //configure the GPIO as output
+    gpio_direction_output(CLK, 0);
+
+    return 0;
+
+    r_gpio:
+    gpio_free(MOSI);
+    gpio_free(MISO);
+    gpio_free(CS);
+    gpio_free(CLK);
+
+    return -1;

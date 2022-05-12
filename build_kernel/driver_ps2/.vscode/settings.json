@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "main.h": "c",
+        "dev_ps2.h": "c"
+    }
+}

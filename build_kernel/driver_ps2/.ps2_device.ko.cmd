@@ -1,0 +1,1 @@
+cmd_/home/phuoc/Myproject/Rasp_project/Kernel/driver_ps2/ps2_device.ko := armv8-rpi4-linux-gnueabihf-ld -r  -EL  --build-id=sha1  -T scripts/module.lds -o /home/phuoc/Myproject/Rasp_project/Kernel/driver_ps2/ps2_device.ko /home/phuoc/Myproject/Rasp_project/Kernel/driver_ps2/ps2_device.o /home/phuoc/Myproject/Rasp_project/Kernel/driver_ps2/ps2_device.mod.o;  true
