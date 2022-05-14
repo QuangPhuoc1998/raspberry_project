@@ -27,4 +27,8 @@ typedef union
 	BYTE_T member;
 } BYTE_FIELD_T;
 
+HEADER_FLAG BYTE_FIELD_T DialFlag1;
+#define DIAL_COUNT DialFlag1.member.bit0
+#define DIAL_CHECK DialFlag1.member.bit1
+
 #endif // _OP_HEADER_FLAG_H_

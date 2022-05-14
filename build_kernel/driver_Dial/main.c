@@ -9,8 +9,13 @@
 *
 *******************************************************************************/
 
+#define GLOBAL_DEFINE (1)
+
 #include "main.h"
-    
+
+#include "Op_InterruptManager.h"
+#include "Mid_DialControl.h"
+
 dev_t dev = 0;
 static struct class *dev_class;
 static struct cdev etx_cdev;
@@ -59,9 +64,13 @@ static int etx_release(struct inode *inode, struct file *file)
 */ 
 static ssize_t etx_read(struct file *filp, char __user *buf, size_t len, loff_t *off)
 {
-  uint8_t temp = 0;
-  
-  if( copy_to_user(buf, &temp, len) > 0) {
+  len = 2;
+  uint8_t ubDataToSend[2]; 
+  ubDataToSend[0] = g_ubUpDownMoveValue;
+  ubDataToSend[1] = g_bMoveEncoderCount;
+  g_ubUpDownMoveValue = NO_CHANGE;
+
+  if( copy_to_user(buf, ubDataToSend, len) > 0) {
     pr_err("ERROR: Not all the bytes have been copied to user\n");
   }
 
@@ -114,12 +123,21 @@ static int __init etx_driver_init(void)
     pr_err( "Cannot create the Device \n");
     goto r_device;
   }
-  /--- User init ---*/
+  /*--- User init ---*/
+  
   if(Mid_DialInit() != 0)
   {
     pr_err( "Cannot init Dial \n");
     goto r_device;
   }
+  
+
+  if(Op_InterruptManagerInit() != 0)
+  {
+    pr_err( "Thread error\n");
+    goto r_device;
+  }
+
   /*----------------*/
   pr_info("Device Driver Insert...Done!!!\n");
   return 0;
@@ -142,6 +160,7 @@ r_unreg:
 static void __exit etx_driver_exit(void)
 {
   Mid_DialDeinit();
+  Op_InterruptManagerDeinit();
   device_destroy(dev_class,dev);
   class_destroy(dev_class);
   cdev_del(&etx_cdev);

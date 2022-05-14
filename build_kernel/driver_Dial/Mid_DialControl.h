@@ -3,13 +3,13 @@
 
 #include "main.h"
 
-#define GPIO_CHANNEL_A (1)
-#define GPIO_CHANNEL_B (2)
-#define GPIO_CHANNEL_P (3)
+#define GPIO_CHANNEL_A (2)
+#define GPIO_CHANNEL_B (3)
+#define GPIO_CHANNEL_P (4)
 
-#define DIAL_READ_CHANNEL_A HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7)
-#define DIAL_READ_CHANNEL_B HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6)
-#define DIAL_READ_CHANNEL_P HAL_GPIO_ReadPin(GPIOJ, GPIO_PIN_1)
+#define DIAL_READ_CHANNEL_A gpio_get_value(GPIO_CHANNEL_A)
+#define DIAL_READ_CHANNEL_B gpio_get_value(GPIO_CHANNEL_B)
+#define DIAL_READ_CHANNEL_P gpio_get_value(GPIO_CHANNEL_P)
 
 typedef enum
 {
@@ -18,7 +18,7 @@ typedef enum
 	DOWN = 0x0F
 } DialDirection_t;
 
-void Mid_DialInit(void);
+uint8_t Mid_DialInit(void);
 void Mid_DialDeinit(void);
 void Mid_DialHandler(void);
 uint8_t Mid_DialGetDirection(void);

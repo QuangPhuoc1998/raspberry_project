@@ -1,11 +1,5 @@
 #include "Mid_DialControl.h"
 
-uint8_t g_ubEncoderValue[3] = {0};
-uint8_t g_ubEncoderBuffer[3][2] = {0};
-uint8_t g_ubUpDownMoveValue = NO_CHANGE;
-uint8_t g_bMoveEncoderCount = 0;
-uint8_t g_ubEncoderCount = 0;
-
 void _DialScan(void);
 void _DialClearBuffer(void);
 
@@ -128,7 +122,7 @@ void Mid_DialHandler(void)
 }
 uint8_t Mid_DialGetDirection(void)
 {
-	return 0;
+	return g_ubUpDownMoveValue;
 }
 
 

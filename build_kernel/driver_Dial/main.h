@@ -11,12 +11,15 @@
 #include <linux/device.h>
 #include <linux/delay.h>
 #include <linux/uaccess.h> 
+#include <linux/slab.h>
+#include <linux/kthread.h>
+#include <linux/timer.h>
+#include <linux/jiffies.h>
 /*--- Peripheral header ---*/
 #include <linux/gpio.h> 
 /*--- Op header ----*/
 #include "Op_HeaderDefine.h"
 #include "Op_HeaderFlag.h"
-#include "Op_HeaderVariable.h""
-/*--- Mid header ---*/
-#include "Mid_DialControl.h"
+#include "Op_HeaderVariable.h"
+
 #endif // _MAIN_H_
